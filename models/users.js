@@ -39,16 +39,13 @@ const Users = DB.sql.define('users', {
   },
 }, {
   freezeTableName: true,
-  timestamps: false
+  timestamps: false,
 });
 
-//avoid return the password on any response
-Users.prototype.toJSON =  () => {
-  console.log('entrando');
-  let values = Object.assign({}, this.get());
-
-  delete values.password;
-  return values;
-}
-
+Users.prototype.toJSON = function() {
+  const user = Object.assign({}, this.get());
+  delete user.password;
+  return user;
+}; 
+  
 module.exports = Users;
