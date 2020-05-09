@@ -1,15 +1,15 @@
-const user = require('../controllers/user/user')
-const product = require('../controllers/product/product')
-const order = require('../controllers/order/order')
+// const productRoute = require('../controllers/product/router')
+// const orderRoute = require('../controllers/order/router')
+const userPost = require('../controllers/user/post');
 
-const routes = function (server) {
-  server.post('/user', user.new)
-  // server.use('/product', product)
-  server.get('/order', (req, res) => { 
-    res.send({
-      message: 'hola'
-    })
-  })
+const routes = function (server, router) {
+  const userRouter = router;
+  
+  server.use('/user', userRouter);
+  userRouter.post('/register', userPost.new);
+  userRouter.post('/login', userPost.login);
+  // server.use('/product', productRoute);
+  // server.use('/order', orderRoute);
 }
 
 module.exports = routes

@@ -1,10 +1,11 @@
 CREATE TABLE `users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `firstName` VARCHAR(45) NOT NULL,
-  `lastName` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(45) UNIQUE NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
+  `firstName` VARCHAR(30) NOT NULL,
+  `lastName` VARCHAR(30) NOT NULL,
+  `email` VARCHAR(60) UNIQUE NOT NULL,
   `phone` INT NOT NULL,
+  `address` VARCHAR(70) NOT NULL,
+  `password` VARCHAR(70) NOT NULL,
   `userStatus` TINYINT NOT NULL DEFAULT 1,
   `rol` VARCHAR(8) NOT NULL DEFAULT 'user',
   PRIMARY KEY (`id`))

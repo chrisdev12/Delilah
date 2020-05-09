@@ -14,4 +14,6 @@ class DbConnect {
   }
 }
 
-module.exports = DbConnect;
+const db = new DbConnect();
+
+module.exports = db;
