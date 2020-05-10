@@ -1,18 +1,7 @@
 require ('./config/config') //Require enviroment variables
-const express = require('express');
-const server = express();
-const router = express.Router();
-const cors = require('cors');
-const mainRouter = require('../network/routes');
+const server = require('../network/routes/index');
 const DB = require('./config/database');
 
-//Basic Setup
-server.options('*', cors()) 
-server.use(express.json());
-server.use(cors());
-
-//Routing all endpoints with /api
-mainRouter(server,router);
 
 //Init server
 DB.sql.authenticate()
