@@ -5,8 +5,8 @@ CREATE TABLE `users` (
   `email` VARCHAR(60) UNIQUE NOT NULL,
   `phone` INT NOT NULL,
   `address` VARCHAR(70) NOT NULL,
-  `password` VARCHAR(70) NOT NULL,
-  `userStatus` TINYINT NOT NULL DEFAULT 1,
+  `password` VARCHAR(100) NOT NULL,
+  `userStatus` BOOLEAN NOT NULL DEFAULT true,
   `rol` VARCHAR(8) NOT NULL DEFAULT 'user',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;

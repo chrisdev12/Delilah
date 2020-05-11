@@ -14,7 +14,6 @@ const Product = DB.sql.define('products', {
   },
   status: {
     type: DataTypes.BOOLEAN,
-    defaultValue: 1
   },
   urlImage: {
     type: DataTypes.STRING,

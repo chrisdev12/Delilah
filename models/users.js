@@ -31,7 +31,7 @@ const Users = DB.sql.define('users', {
   },
   userStatus: {
     type: DataTypes.BOOLEAN,
-    defaultValue: 1
+    defaultValue: true
   },
   rol: {
     type: DataTypes.STRING,

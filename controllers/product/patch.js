@@ -2,7 +2,7 @@ const cloudUpload = require('../../middlewares/files/upload');
 const Model = require('../../models/products');
 const response = require('../../network/responses');
 
-async function addImage(req, res) {
+async function image(req, res) {
   try {
 
     const upload = await cloudUpload(req.files.path);
@@ -19,4 +19,32 @@ async function addImage(req, res) {
   }  
 }
 
-module.exports = { addImage };
+async function updateProduct(req, res) {
+  try {
+    if (!req.body.desc && req.body.price && req.body.status) throw new Error;
+
+    const product = await Model.findOne({ where: { id: req.params.id } });
+    await Model.update(
+      {
+        desc: req.body.desc || product.desc,
+        price: req.body.price || product.price,
+        status: req.body.status ? true : false
+      },
+      {
+        where: { id: req.params.id },
+        returning: true,
+      }
+    );
+
+    return response.success(res, 200, 'Product updated');
+  
+  } catch (error) {
+    console.error(error);
+    return response.error(res, 404, "No products found or required fields sent");
+  }  
+}
+
+module.exports = {
+  image,
+  updateProduct
+};
