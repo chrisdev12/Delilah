@@ -1,14 +1,13 @@
 const Model = require('../../models/users');
 const bcrypt = require('bcrypt');
-const token = require('../../middlewares/auth/token');
+const token = require('../../middlewares/auth/auth');
 const response = require('../../network/responses');
 
 async function register (req, res) {
   try {
     const user = await Model.create(
       {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
         address: req.body.address,

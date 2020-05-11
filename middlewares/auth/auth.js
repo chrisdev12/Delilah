@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
-
+const response = require('../../network/responses');
 
 
 function create (userLogged) {
   return jwt.sign({ user: userLogged }, 'secret-acamica', { expiresIn: 60 * 60 * 24 });
 }
 
-function validate (req, res, next) {
+function tokenValidation (req, res, next) {
   try {
     if (!req.headers.authorization) throw new Error;    
     let token = req.headers.authorization.replace('Bearer ', '');
@@ -29,9 +29,26 @@ function admin (req, res, next) {
   }
 }
 
+function ownership(req,res,next) {
+  try {
+    const idToken = req.token.id;
+    const idRequired = req.params.id;
+
+    if (idToken == idRequired) {
+      next()
+    } else {
+      throw new Error
+    }
+  } catch (error) {
+    console.log(error);
+    response.error(res, 403, "you do not have the permissions to perform this action");
+  }
+}
+
 
 module.exports = {
   create,
-  validate,
-  admin
+  tokenValidation,
+  admin,
+  ownership
 };

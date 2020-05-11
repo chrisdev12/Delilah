@@ -4,11 +4,7 @@ const { DataTypes } = require('sequelize');
 //Db.sql is the sequalizeInstance
 const Users = DB.sql.define('users', {
   // Model attributes are defined here
-  firstName: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  lastName: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -29,12 +25,18 @@ const Users = DB.sql.define('users', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  userStatus: {
+  status: {
     type: DataTypes.BOOLEAN,
     defaultValue: true
   },
   rol: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM,
+    values: ['user', 'admin'],
+    validate: {
+      isIn: {
+        args: [['user', 'admin']]
+      }
+    },
     defaultValue: 'user'
   },
 }, {

@@ -10,5 +10,17 @@ async function all (req, res) {
   }
 }
 
+async function findById (req, res) {
+  try {
+    const user = await Model.findOne({ where: { id: req.params.id } });
+    return response.success(res, 200, user);
+  } catch (error) {
+    return response.error(res, 403, 'any users founded');
+  }
+}
 
-module.exports = {all};
+
+module.exports = {
+  all,
+  findById
+};

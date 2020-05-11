@@ -1,12 +1,11 @@
 CREATE TABLE `users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `firstName` VARCHAR(30) NOT NULL,
-  `lastName` VARCHAR(30) NOT NULL,
+  `name` VARCHAR(40) NOT NULL,
   `email` VARCHAR(60) UNIQUE NOT NULL,
   `phone` INT NOT NULL,
   `address` VARCHAR(70) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
-  `userStatus` BOOLEAN NOT NULL DEFAULT true,
-  `rol` VARCHAR(8) NOT NULL DEFAULT 'user',
+  `status` BOOLEAN NOT NULL DEFAULT true,
+  `rol` ENUM('user', 'admin') DEFAULT 'user',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;

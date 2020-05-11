@@ -21,7 +21,7 @@ async function image(req, res) {
 
 async function updateProduct(req, res) {
   try {
-    if (!req.body.desc && req.body.price && req.body.status) throw new Error;
+    if (!req.body.desc && !req.body.price && req.body.status === undefined) throw new Error;
 
     const product = await Model.findOne({ where: { id: req.params.id } });
     await Model.update(
