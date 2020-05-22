@@ -1,9 +1,11 @@
 CREATE TABLE orders(
   id INT NOT NULL AUTO_INCREMENT,
-  id_user INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_user) REFERENCES users(id), 
+  payMethod ENUM('creditCard', 'cash') NOT NULL DEFAULT 'cash'  ,
+  status ENUM('new', 'confirmed', 'preparing', 'sending', 'cancel', 'delivered') NOT NULL DEFAULT 'new',
+  userId INT NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (userId) REFERENCES users(id), 
   PRIMARY KEY (id) 
 );
 
