@@ -5,4 +5,4 @@ CREATE TABLE `products` (
   `status` BOOLEAN NOT NULL DEFAULT true,
   `urlImage` VARCHAR(130) NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
+ENGINE = InnoDB;

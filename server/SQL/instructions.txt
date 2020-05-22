@@ -1,0 +1,72 @@
+1. Actualmente el proyecto está funcionando con una base de datos en un servidorWeb hosteado en godaddy.
+2 Si desea integrar la base de datos en un servidor propio, bien sea local o en internet, debe cambiar la URL con la que Sequalize hace la autenticación.
+Esa url la puede encontrar en Server/config/config : la variable de entorno es "process.env.URLDB".
+3. En caso de que este haciendo pruebas desde un servidor local, en el punto 6 se hace referencia al archivo SQL que ya tiene las tablas pobladas;
+   si quiere comenzar a poblar las tablas desde 0, recuerde algunos pasos iniciales:
+
+A.  mysql -u root -p : para entrar al entorno de MariaDB.
+B. create database Delilah; = Crear una base de datos llamada Delilah.
+C. use Delilah; = Usar/entrar a la base de datos.
+D. Una vez la terminal nos confirme que hemos cambiado la bse de datos y estámos usando la que queremos, procedemos a pegar los query:
+
+CREATE TABLE `users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(40) NOT NULL,
+  `email` VARCHAR(60) UNIQUE NOT NULL,
+  `phone` INT NOT NULL,
+  `address` VARCHAR(70) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
+  `status` BOOLEAN NOT NULL DEFAULT true,
+  `rol` ENUM('user', 'admin') DEFAULT 'user',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+CREATE TABLE `products` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `desc` VARCHAR(255) NOT NULL,
+  `price` DOUBLE NOT NULL DEFAULT 0,
+  `status` BOOLEAN NOT NULL DEFAULT true,
+  `urlImage` VARCHAR(130) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+CREATE TABLE orders(
+  id INT NOT NULL AUTO_INCREMENT,
+  payMethod ENUM('creditCard', 'cash') NOT NULL DEFAULT 'cash'  ,
+  status ENUM('new', 'confirmed', 'preparing', 'sending', 'cancel', 'delivered') NOT NULL DEFAULT 'new',
+  userId INT NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (userId) REFERENCES users(id), 
+  PRIMARY KEY (id) 
+);
+
+CREATE TABLE orders_products(
+  orderId INT NOT NULL ,
+  productId INT NOT NULL,
+  quantity INT DEFAULT 0,
+  FOREIGN KEY (orderId) REFERENCES orders(id),
+  FOREIGN KEY (productId) REFERENCES products(id)  
+);
+
+4. Tenga en cuenta que estos querys están en este mismo folder, usted puede recrearlos desde Workbench o phpMyAdmin o su gestor de preferencia;
+Recuerde crear primero el query de Users.sql y Products.sql antes que el query de Order.sql
+
+5. En caso de que su ruta sea local, lo más seguro es que su url sea la siguiente:
+
+mysql://root@localhost:3306/<nombreBD> . Quedaría así asumiendo que nuestra BD se llame delilah: mysql://root@localhost:3306/delilah
+
+Esta url es la que se debe reemplazar en el archivo de las variables de entorno.
+
+6. Dentro de este folder se incluye el archivo SQL de la tabla ya poblada. Este archivo lo puede hacer para importar desde gestores de bases de datos como phpMyAdmin
+o puede hacerlo manualmente desde la termina, en caso de que quiera proceder de la segunda forma, recuerde = 
+
+A. Primero debe crear la BD antes de ejecutar el query de la importación.
+
+B. Revise este foro donde se explica de forma más detallada como se establece la conexión: https://stackoverflow.com/questions/4546778/how-can-i-import-a-database-with-mysql-from-terminal
+
+C. Este sería un query de ejemplo, que se ejecuta antes de entrar propiamente a MariaDb:
+mysql -u root -p test_delilah < C:\Users\Asus-Pc\Downloads\delilah.sql
+
+7. El primer usuario administrador solo se puede volver administrador configurandolo directamente desde la BD. Puede cambairlo desde un gestor o con una sentencia
+UPDATE. Ej: UPDATE users SET rol = 'admin' WHERE id = 1. Asumiendo que volvamos admin al primer usuario registrado.

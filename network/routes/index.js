@@ -12,7 +12,7 @@ server.use(cors({ origin: '*' }));
 server.use(express.json());
 
 server.use('/user', userRoutes);
-server.use('/product', [auth.tokenValidation, auth.admin]);
+server.use('/product', auth.tokenValidation);
 server.use('/product', productRoutes);
 server.use('/order', auth.tokenValidation);
 server.use('/order', orderRoutes);
