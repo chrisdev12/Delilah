@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const response = require('../../network/responses');
-
+const { Orders } = require('../../models/order')
 
 function create (userLogged) {
   return jwt.sign({ user: userLogged }, 'secret-acamica', { expiresIn: 60 * 60 * 24 });
@@ -32,7 +32,8 @@ function admin (req, res, next) {
 function ownership(req,res,next) {
   try {
     const idToken = req.token.id;
-    const idRequired = req.params.id;
+    const idRequired = req.query.id || req.params.id;
+    console.log(idRequired);
 
     if (idToken == idRequired) {
       next()
@@ -45,10 +46,30 @@ function ownership(req,res,next) {
   }
 }
 
+async function orderOwnership(req,res,next) {
+  try {
+    // Verify if the user that requiere the orderInfo, is the owner of it. Each order has in the table the userId who created it
+    const order = await Orders.findOne(
+      {
+        where: { id: req.params.id },
+        attributes: ['userId']
+      },
+    );
+
+    if (req.token.id === order.dataValues.userId) {
+      next()
+    } else {
+      throw new Error
+    }
+  } catch (error) {
+    response.error(res, 403, "you do not have the permissions to perform this action");
+  }
+}
 
 module.exports = {
   create,
   tokenValidation,
   admin,
-  ownership
+  ownership,
+  orderOwnership
 };

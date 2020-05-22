@@ -1,4 +1,3 @@
-const { Orders, OrdersProducts } = require('../../models/order')
 const response = require('../../network/responses');
 const DB = require('../../server/config/database');
 
@@ -32,7 +31,7 @@ async function findById (req, res) {
       INNER JOIN users as u ON o.userId = u.id 
       INNER JOIN orders_products as op ON op.orderId = o.id
       INNER JOIN products as p ON op.productId = p.id
-      WHERE o.id = ${req.params.orderId} GROUP BY o.id ` ,
+      WHERE o.id = ${req.params.id} GROUP BY o.id ` ,
       { type: DB.sql.QueryTypes.SELECT }
     );
     if (!order) throw new Error;
@@ -53,13 +52,13 @@ async function findByUser (req, res) {
       INNER JOIN users as u ON o.userId = u.id 
       INNER JOIN orders_products as op ON op.orderId = o.id
       INNER JOIN products as p ON op.productId = p.id
-      WHERE o.userId = ${req.params.userId} GROUP BY o.id ` ,
+      WHERE o.userId = ${req.query.id} GROUP BY o.id `,
       { type: DB.sql.QueryTypes.SELECT }
     );
     if (!order) throw new Error;
     return response.success(res, 200, order);
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     return response.error(res, 403, 'Sorry. No orders found');
   }
 }
