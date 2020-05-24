@@ -17,7 +17,7 @@ async function all (req, res) {
     return response.success(res, 200, order);
   } catch (error) {
     console.log(error)
-    return response.error(res, 403, 'Sorry. No orders found');
+    return response.error(res, 404, 'Sorry. None orders found');
   }
 }
 
@@ -38,7 +38,7 @@ async function findById (req, res) {
     return response.success(res, 200, order);
   } catch (error) {
     console.log(error)
-    return response.error(res, 403, 'Sorry. No orders found');
+    return response.error(res, 404, 'Sorry. None orders found');
   }
 }
 
@@ -59,7 +59,7 @@ async function findByUser (req, res) {
     return response.success(res, 200, order);
   } catch (error) {
     // console.log(error)
-    return response.error(res, 403, 'Sorry. No orders found');
+    return response.error(res, 404, 'Sorry. None orders found');
   }
 }
 

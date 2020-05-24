@@ -25,7 +25,7 @@ async function updateBody(req, res) {
   
   } catch (error) {
     console.error(error);
-    return response.error(res, 404, "No users found or required fields sent");
+    return response.error(res, 404, "None users found or required fields sent");
   }  
 }
 
@@ -60,7 +60,7 @@ async function updateRol(req, res) {
   
   } catch (error) {
     console.error(error);
-    return response.error(res, 404, "Error. Status was not updated");
+    return response.error(res, 404, "Error. Rol was not updated");
   }  
 }
 

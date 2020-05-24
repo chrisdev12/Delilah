@@ -40,7 +40,7 @@ async function updateProduct(req, res) {
   
   } catch (error) {
     console.error(error);
-    return response.error(res, 404, "No products found or required fields sent");
+    return response.error(res, 404, "None products found or required fields sent");
   }  
 }
 

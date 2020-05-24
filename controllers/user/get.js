@@ -6,7 +6,7 @@ async function all (req, res) {
     const users = await Model.findAll();
     return response.success(res, 200, users);
   } catch (error) {
-    return response.error(res, 403, 'any users founded');
+    return response.error(res, 404, 'none users found');
   }
 }
 
@@ -15,7 +15,7 @@ async function findById (req, res) {
     const user = await Model.findOne({ where: { id: req.params.id } });
     return response.success(res, 200, user);
   } catch (error) {
-    return response.error(res, 403, 'any users founded');
+    return response.error(res, 404, 'none users found');
   }
 }
 

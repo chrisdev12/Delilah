@@ -1,0 +1,832 @@
+swagger: "2.0"
+info:
+  description: "API rest for delivery services"
+  version: "1.0.0"
+  title: "Delilah+Restoh"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "christianm.bravop@gmail.com"
+  license: 
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+host: "localhost:3000"
+tags:
+- name: "User"
+  description: "Create and update users | Users login and logut"
+- name: "Product"
+  description: "CRUD operations with products"
+- name: "Order"
+  description: "Orders managment | Create, get and update Status of the orders"
+schemes:
+- "https"
+- "http"
+paths:
+  /user/register:
+    post:
+      tags:
+      - "User"
+      summary: "Create user"
+      description: "This can only be done by the logged in user."
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Register a new user"
+        required: true
+        schema:
+          $ref: "#/definitions/newUser"
+      responses:
+        201: 
+          description: "successful operation / User created"
+          schema:
+            $ref: "#/definitions/User"
+        405:
+          description: "Error in new user register. Try with another email please."
+  /user/login:
+    post:
+      tags:
+      - "User"
+      summary: "User logging system"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "body"
+        description: "The user name for login"
+        required: true
+        schema:
+            type: "object"
+            properties:
+              email:
+                type: "string"
+                example: "Andres Iniesta"
+              password:
+                type: "string"
+                example: "1q2w3e4r"
+      responses:
+        200:
+          description: "User authenticated"
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          description: "User or password wrong"
+  /user:
+    get:
+      tags:
+      - "User"
+      summary: "get all users"
+      description: "Get all users, must be an admin to perfom this endpoint"
+      operationId: "getAllUsersr"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Array of user objects available"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+        403:
+          description: "you do not have the permissions to perform this action"
+        404:
+          description: "none users found"
+      security:
+      - adminAuthorization: []      
+  /user/{id}:
+    get:
+      tags:
+      - "User"
+      summary: "Get user by ID"
+      description: "The user only will get the userInfo if is requesting his Id, otherwise they will get back an auth error"
+      operationId: "getUserById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The name that needs to be fetched. Use user1 for testing. "
+        required: true
+        type: "string"
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"  
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        403:
+          description: "you do not have the permissions to perform this action"
+        404:
+          description: "none users found"  
+    patch:
+      tags:
+      - "User"
+      summary: "Updated user by Id "
+      description: "The user will only update the user information under which he is logged"
+      operationId: "updateUserById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "the userId that going to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "at least object property of the proposal Object should be sent"
+        description: "Updated user object"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+              example: "Andres Iniesta"
+            email:
+              type: "string"
+              example: "Andres@crack.com"
+            phone:
+              type: "integer"
+              example: 3013345678
+            address:
+              type: "string"
+              example: "Barcelona, calle #4"
+            status:
+              type: "boolean"
+              description: "User Status"
+              example: true
+      responses:
+        200:
+          description: "User updated"
+        403:
+          description: "you do not have the permissions to perform this action"  
+        404:
+          description: "None users found or required fields sent"
+  /user/password/{id}:
+    patch:
+      tags:
+      - "User"
+      summary: "Updated user by Id "
+      description: "The user will only update the user password under which he is logged"
+      operationId: "updateUserPassword"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "the userId that going to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "password"
+        description: "Updated user password"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            password:
+              type: "string"
+              example: "1q2w3e4r"
+      responses:
+        200:
+          description: "User password updated"
+        404:
+          description: "Password was not updated"
+        403:
+          description: "you do not have the permissions to perform this action"  
+  /user/rol/{id}:
+    patch:
+      tags:
+      - "User"
+      summary: "Updated user Rol by Id "
+      description: "Only the admins users will  update the user rol of a user"
+      operationId: "updateUserRol"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "the userId that going to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "rol"
+        description: "Updated user rol. Only possible by user admins"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            rol:
+              type: "string"
+              enum:
+              - "admin"
+              - "user"
+      responses:
+        200:
+          description: "User status updated to: <newRol>"
+        404:
+          description: "Error. Rol was not updated"
+        403:
+          description: "you do not have the permissions to perform this action"
+      security:
+      - adminAuthorization: []      
+  /product:
+    post:
+      tags:
+      - "Product"
+      summary: "Add a new product to the store"
+      description: "All the products must have the required fields of the model and only admin can create products"
+      operationId: "addProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Product model / Required fields to create a new one product"
+        required: true
+        schema:
+          $ref: "#/definitions/Product"
+      responses:
+        201:
+          description: "Product created"
+          schema:
+            properties:
+              id:
+                type: "integer"
+                example: 5
+              desc:
+                type: "string"
+                example: "Baby beef"
+              price:
+                type: "integer"
+                example: 25000
+              status:
+                type: "boolean"
+                example: true
+        405:
+          description: "Error when adding the product. Remember that the description and price are required."
+        403:
+          description: "you do not have the permissions to perform this action"  
+      security:
+      - adminAuthorization: []
+    get:
+      tags:
+      - "Product"
+      summary: "Get all products"
+      description: "Get all the products available. Only possible by admin users"
+      operationId: "getAllProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Array of products objects available"
+          schema:
+            type: array
+            items:
+              properties:
+                id:
+                  type: "integer"
+                  example: 1
+                desc:
+                  type: "string"
+                  example: "Lassagna"
+                price:
+                  type: "integer"
+                  example: 35000
+                status:
+                  type: "boolean"
+                  example: true
+                urlImage:
+                  type: "string"
+                  example: "null"
+        404:
+          description: "none products found"
+        403:
+          description: "you do not have the permissions to perform this action"  
+  /product/{id}:
+    get:
+      tags:
+      - "Product"
+      summary: "Get product by Id"
+      description: "Find a particular product associated with his ID"
+      operationId: "getProductsById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "the productId that going to be updated"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Porduct associated with that ID"
+          schema:
+            properties:
+              id:
+                type: "integer"
+                example: 2
+              desc:
+                type: "string"
+                example: "Milshake"
+              price:
+                type: "integer"
+                example: 15000
+              status:
+                type: "boolean"
+                example: true
+              urlImage:
+                type: "string"
+                example: "null"
+        404:
+          description: "none products found"
+        403:
+          description: "you do not have the permissions to perform this action"
+    delete:
+      tags:
+      - "Product"
+      summary: "Delete a product by his ID"
+      description: "Delete a product by his ID || Only possible by admin users"
+      operationId: "deleteProductById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "the productId that going to be deleted"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: "Product deleted"
+        404:
+          description: "None products found/deleted"  
+        403:
+          description: "you do not have the permissions to perform this action"
+      security:
+      - adminAuthorization: []
+    patch:
+      tags:
+      - "Product"
+      summary: "Update at least one field of a product details by his ID"
+      description: "Update any detail of a product || Only possible by admin users"
+      operationId: "updateProductById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "the productId that going to be deleted"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Product model / Required at least one of the object properties fields to update the product"
+        required: true
+        schema:
+          $ref: "#/definitions/Product"  
+      responses:
+        200:
+          description: "Product updated"
+        403:
+          description: "you do not have the permissions to perform this action"
+        404:
+          description: "No products found or required fields sent"
+      security:
+      - adminAuthorization: []  
+  /product/{id}/image:
+    patch:
+      tags:
+      - "Product"
+      summary: "Update at lease one field of a product by his ID"
+      description: "Update the image product || Only possible by admin users"
+      operationId: "updateImageProductById"
+      consumes: [multipart/form-data]
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "the productId that going to be deleted"
+        required: true
+        type: "string"
+      - in: "formData"
+        type: "file"
+        name: "file"
+        description: "Image file that will be uploaded to cludinary and the URL returned"
+        required: true
+      responses:
+        200:
+          description: "imageUploaded to coludinary and URL updated in DB"
+          schema:
+            properties:
+              message:
+                type: "string"
+                example: "https://res.cloudinary.com/dircdfylu/image/upload/v1590262243/fczsrkoe1nixkytmycos.jpg"
+        403:
+          description: "you do not have the permissions to perform this action"
+        404:
+          description: "You should send a picture and ensure it's no heavier than 20MB"
+      security:
+      - adminAuthorization: []
+  /order:
+    get:
+      tags:
+      - "Order"
+      summary: "get all orders"
+      description: "Return all available orders, only possible by admin users"
+      operationId: "getAllOrder"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Array of Order objects available"
+          schema:
+            type: "array"
+            items:
+              properties:
+                Estado:
+                  type: "string"
+                  example: "new"
+                Fecha:
+                  type: "string"
+                  example: "2020-05-22T16:41:50.000Z"
+                Número:
+                  type: "string"
+                  example: "4"
+                usuario:
+                  type: "string"
+                  example: "Andres Iniesta"
+                dirección: 
+                  type: "string"
+                  example: "Barcelona, calle #4"
+                productos: 
+                  type: "string"
+                  example: "Lassagna(35000) x 2,Malteada de chocolate(13000) x 2"
+                cantidadXproducto:
+                  type: "string"
+                  example: "2,2"
+                Pago: 
+                  type: "string"
+                  example: "cash - 96000"  
+        403:
+          description: "you do not have the permissions to perform this action"
+        404:
+          description: "Sorry. None orders found"
+      security:
+      - adminAuthorization: []
+    post:
+      tags:
+      - "Order"
+      summary: "Create a new order"
+      description: "Create a new one product, only possible by admin users"
+      operationId: "createOrder"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "body"
+        in: "body"
+        description: "Body required to create new one order"
+        required: true
+        schema:
+          $ref: "#/definitions/Order"
+      responses:
+        201:
+          description: "Order created"
+          schema:
+            properties:
+              status:
+                type: "string"
+                example: "new"
+              createdAt:
+                type: "string"
+                format: "date-time"
+              updatedAt:
+                type: "string"
+                format: "date-time"
+              id:
+                type: "integer"
+                example: 14
+              payMethod:
+                type: "string"
+                example: "creditCard"
+              userId:
+                type: "integer"
+                example: 5 
+        403:
+          description: "you do not have the permissions to perform this action"
+        405:
+          description: "Error creating an order"      
+  /order/{id}:
+    get:
+      tags:
+      - "Order"
+      summary: "get Order by ID"
+      description: "Returns an order by his ID. Only the user who created that order can get back it. Othwerwhise the user will receive an 403 / auth error."
+      operationId: "getOrderById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "the productId that going to be deleted"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            properties:
+              Estado:
+                type: "string"
+                example: "new"
+              Fecha:
+                type: "string"
+                example: "2020-05-22T16:41:50.000Z"
+              Número:
+                type: "string"
+                example: "4"
+              usuario:
+                type: "string"
+                example: "Andres Iniesta"
+              dirección: 
+                type: "string"
+                example: "Barcelona, calle #4"
+              productos: 
+                type: "string"
+                example: "Lassagna(35000) x 2,Malteada de chocolate(13000) x 2"
+              cantidadXproducto:
+                type: "string"
+                example: "2,2"
+              Pago: 
+                type: "string"
+                example: "cash - 96000"
+        403:
+          description: "you do not have the permissions to perform this action"         
+    patch:
+      tags:
+      - "Order"
+      summary: "update order Status by ID"
+      description: "Update the order status with one of those values: 'new', 'confirmed', 'preparing', 'sending', 'cancel', 'delivered'"
+      operationId: "updateStatusOrderById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "the productId that going to be deleted"
+        required: true
+        type: "string"
+      - name: "status"
+        in: "body"
+        description: "new order status to be entered"
+        required: true
+        schema:
+          properties:
+            status:
+              type: "string"
+              example: "confirmed"
+              enum:
+              - "new"
+              - "confirmed"
+              - "preparing"
+              - "sending"
+              - "cancel"
+              - "delivered"
+      responses:
+        200:
+          description: "Order status updated to: statusProvided"
+        404:
+          description: "Error. Order status was not updated"
+        403:
+          description: "you do not have the permissions to perform this action"  
+      security:
+      - adminAuthorization: []
+  /order/user:
+    get:
+      tags:
+      - "Order"
+      summary: "Get all the orders by user"
+      description: "Bring all the orders that a user has created"
+      operationId: "getOrdersByUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "query"
+        description: "the productId that going to be deleted"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Array of Order objects related to a particular user"
+          schema:
+            type: "array"
+            items:
+              properties:
+                Estado:
+                  type: "string"
+                  example: "new"
+                Fecha:
+                  type: "string"
+                  example: "2020-05-20T16:41:50.000Z"
+                Número:
+                  type: "string"
+                  example: "5"
+                usuario:
+                  type: "string"
+                  example: "Lionel Messi"
+                dirección: 
+                  type: "string"
+                  example: "Barcelona, calle #5"
+                productos: 
+                  type: "string"
+                  example: "Lassagna(35000) x 2,Malteada de chocolate(13000) x 2"
+                cantidadXproducto:
+                  type: "string"
+                  example: "2,2"
+                Pago: 
+                  type: "string"
+                  example: "cash - 96000"
+        404:
+          description: "Sorry. None orders found"
+        403:
+          description: "you do not have the permissions to perform this action"  
+securityDefinitions:
+  adminAuthorization:
+    type: "apiKey"
+    name: "Bearer Token"
+    in: "header"
+definitions:
+  Product:
+    type: "object"
+    properties:
+      desc:
+        type: "string"
+      price:
+        type: "integer"
+        format: "int64"
+      status:
+        type: "boolean"
+  Order:
+    type: "object"
+    properties:
+      payMethod:
+        type: "string"
+        enum:
+        - "creditCard"
+        - "cash"
+      products:
+        type: "object"
+        properties:
+          1:
+            type: "string"
+            example: 4
+          2:
+            type: "string"
+            example: 2
+          NOTE:
+            type: "string"
+            example: "Follow this format to add new products with their respectively quantity, userId is a number writen as a string and the quantity  is an integer"      
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 5
+      name:
+        type: "string"
+        example: "Andres Iniesta"
+      email:
+        type: "string"
+        example: "Andres@crack.com"
+      phone:
+        type: "integer"
+        example: 3013345678
+      address:
+        type: "string"
+        example: "Barcelona, calle #4"
+      status:
+        type: "boolean"
+        description: "User Status"
+        example: true
+      rol:
+        type: "string"
+        enum:
+        - "admin"
+        - "user"
+        example: "user"
+      token:
+        type: "string"
+        example: "Only provided when the user be logged"
+  newUser:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Andres Iniesta"
+      email:
+        type: "string"
+        example: "Andres@crack.com"
+      phone:
+        type: "integer"
+        format: "int64"
+        example: 3013345678
+      address:
+        type: "string"
+        example: "Barcelona, calle #4"
+      password:
+        type: "string"
+        example: "1q2w3e4r"
+externalDocs:
+  description: "Find out more about Delilah+Restoh"
+  url: "http://github.com/chrisdev12"

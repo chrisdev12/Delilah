@@ -1,0 +1,604 @@
+{
+	"info": {
+		"_postman_id": "ab1b9c2a-8253-4cd4-9ba9-e9bbe3c239e7",
+		"name": "Restoh",
+		"description": "Restoh is a delivery food API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User get All",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{user}}",
+					"host": [
+						"{{user}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User getById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{user}}/1",
+					"host": [
+						"{{user}}"
+					],
+					"path": [
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User register / new users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODY0YjFmMDExOWM1MDkwNDJkMTY1ZCIsImVtYWlsIjoibWlndXN0YW5pZXRvLjJAZ21haWwuY29tIiwidXNlciI6Im1pZ3VlbDduaWV0byIsImlhdCI6MTU4NjM3MzY1NH0.5AwdG59F5EmdekWx4WNnAZ0LL2IXfa2HNNmCHBWafsM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\" : \"lionel Messi\",\n\t\"email\" : \"messi@test.com\",\n\t\"phone\" : 1232345,\n\t\"address\": \"Argentina, Newells\",\n\t\"password\" : \"1q2w3e4r\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{user}}/register",
+					"host": [
+						"{{user}}"
+					],
+					"path": [
+						"register"
+					]
+				},
+				"description": "Regiser new user. Return the user details int he body response (except the password)"
+			},
+			"response": []
+		},
+		{
+			"name": "User login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cd8e8469-017a-4971-be46-8bdb9cbad065",
+						"exec": [
+							"let resp = pm.response.json();",
+							"",
+							"if (resp.message) return pm.environment.set(\"token\", resp.message.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\" : \"messi@test.com\",\n\t\"password\": \"1q2w3e4r\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{user}}/login",
+					"host": [
+						"{{user}}"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Return token"
+			},
+			"response": []
+		},
+		{
+			"name": "User update body",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"status\" : true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{user}}/1",
+					"host": [
+						"{{user}}"
+					],
+					"path": [
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User changePassword",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\" : \"1q2w3e4r\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{user}}/password/4",
+					"host": [
+						"{{user}}"
+					],
+					"path": [
+						"password",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User updateRol",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rol\" : \"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{user}}/rol/5",
+					"host": [
+						"{{user}}"
+					],
+					"path": [
+						"rol",
+						"5"
+					]
+				},
+				"description": "Only admin can execute this"
+			},
+			"response": []
+		},
+		{
+			"name": "Product get all",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{product}}",
+					"host": [
+						"{{product}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product getById",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{product}}/1",
+					"host": [
+						"{{product}}"
+					],
+					"path": [
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"desc\" : \"Baby beef\",\n\t\"price\": 25000,\n\t\"status\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{product}}",
+					"host": [
+						"{{product}}"
+					]
+				},
+				"description": "send price and description"
+			},
+			"response": []
+		},
+		{
+			"name": "Product update image",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Asus-Pc/Downloads/babybeef.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{product}}/5/image",
+					"host": [
+						"{{product}}"
+					],
+					"path": [
+						"5",
+						"image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product patch body",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"desc\": \"Mojarra Salteada\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{product}}/4",
+					"host": [
+						"{{product}}"
+					],
+					"path": [
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product deleteById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{product}}/4",
+					"host": [
+						"{{product}}"
+					],
+					"path": [
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order create new one",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"payMethod\": \"creditCard\",\n\t\"products\" : {\n\t\t\"4\": 2,\n\t\t\"1\" : 1,\n\t\t\"3\" : 4,\n\t\t\"2\" : 2\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{order}}",
+					"host": [
+						"{{order}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order getById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{order}}/14",
+					"host": [
+						"{{order}}"
+					],
+					"path": [
+						"14"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order getAll",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{order}}",
+					"host": [
+						"{{order}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order getAllByUser",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{order}}/user?id=4",
+					"host": [
+						"{{order}}"
+					],
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order updateStatus",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"status\" : \"delivered\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{order}}/2",
+					"host": [
+						"{{order}}"
+					],
+					"path": [
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -6,7 +6,7 @@ async function all (req, res) {
     const products = await Model.findAll();
     return response.success(res, 200, products);
   } catch (error) {
-    return response.error(res, 403, 'any products found');
+    return response.error(res, 404, 'none products found');
   }
 }
 
@@ -17,7 +17,7 @@ async function findById (req, res) {
 
     return response.success(res, 200, product);
   } catch (error) {
-    return response.error(res, 403, 'No products found');
+    return response.error(res, 404, 'none products found');
   }
 }
 

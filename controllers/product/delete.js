@@ -9,7 +9,7 @@ async function deleteById(req, res) {
     return response.success(res, 204);
   } catch (error) {
     console.log(error)
-    return response.error(res, 403, 'No products found/deleted');
+    return response.error(res, 404, 'None products found/deleted');
   }
 }
 

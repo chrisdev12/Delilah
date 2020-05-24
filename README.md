@@ -13,8 +13,10 @@ type <NPM i> from the terminal to install all the required dependencies.
 
 ## Database connection
 
-If is needed, read the instructions.txt on Server/SQL/instructions.txt to setup the database connection.
-Remember that the DB url is setup by default in the enviroment variables on Server/config/config.js.
+Tables queries and test db already populated on docs/SQL/.
+
+If is needed, read the instructions.txt on docs/SQL/instructions.txt to setup the database connection.
+Remember that the DB URL connection is setup on a enviroment variable in Server/config/config.js.
 
 <All tables must have the same name as those referenced in the queries on Server/SQL>. In case you want to rename them, the Model files
 must be reconfigured to make match again. 
@@ -34,3 +36,4 @@ The Cludinary API keys and tokens might not be working, since they are private p
 
 # API Documentation
 
+https://chrisdev12.github.io/Delilah/

@@ -1,8 +1,8 @@
 1. Actualmente el proyecto está funcionando con una base de datos en un servidorWeb hosteado en godaddy.
 2 Si desea integrar la base de datos en un servidor propio, bien sea local o en internet, debe cambiar la URL con la que Sequalize hace la autenticación.
-Esa url la puede encontrar en Server/config/config : la variable de entorno es "process.env.URLDB".
+  Esa url la puede encontrar en Server/config/config : la variable de entorno es "process.env.URLDB".
 3. En caso de que este haciendo pruebas desde un servidor local, en el punto 6 se hace referencia al archivo SQL que ya tiene las tablas pobladas;
-   si quiere comenzar a poblar las tablas desde 0, recuerde algunos pasos iniciales:
+  si quiere comenzar a poblar las tablas desde 0, recuerde algunos pasos iniciales:
 
 A.  mysql -u root -p : para entrar al entorno de MariaDB.
 B. create database Delilah; = Crear una base de datos llamada Delilah.
