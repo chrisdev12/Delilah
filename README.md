@@ -23,6 +23,8 @@ must be reconfigured to make match again.
 
 <Delilah.sql> contains the populated tables in case they are needed
 
+If you test it with the delilah.sql dump, the admin user is nubia@admin.com and the password = 1q2w3e4r
+
 ## Cloudinary
 
 The Cludinary API keys and tokens might not be working, since they are private per user, remember to update them  with your own credentual in the environment variables file in case you want to continue using cludinary to images hosting.
