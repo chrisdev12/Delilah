@@ -686,6 +686,34 @@ paths:
           description: "you do not have the permissions to perform this action"  
       security:
       - adminAuthorization: []
+    delete:
+      tags:
+      - "Order"
+      summary: "Delete a order by his ID"
+      description: "Delete a order by his ID || Only possible by admin users"
+      operationId: "deleteOrderById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Bearer Token"
+        in: "header"
+        description: "Bearer Token must be sent through headers to verify the user ownership and role"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "the orderId that going to be deleted"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: "Product deleted"
+        404:
+          description: "None products found/deleted"  
+        403:
+          description: "you do not have the permissions to perform this action"
+      security:
+      - adminAuthorization: []  
   /order/user:
     get:
       tags:
